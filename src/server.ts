@@ -3,6 +3,7 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import { envVars } from "./app/confiq/env";
+import { seedSuperAdmin } from "./app/utils/seedSuperAdmin";
 let server: Server;
 const startServer = async () => {
   
@@ -20,7 +21,12 @@ const startServer = async () => {
   }
 };
 
-startServer();
+(async () => {
+ await startServer();
+ await seedSuperAdmin();
+
+})()
+
 
 process.on("unhandledRejection", (err) => {
   console.log("Unhandled Rejection detected... Server shtting down..", err);
