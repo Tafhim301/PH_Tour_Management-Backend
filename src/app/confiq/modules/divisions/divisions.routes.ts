@@ -15,8 +15,14 @@ router.post(
 );
 router.get(
   "/",
-  checkAuth(...Object.values(Role)),
+ 
   DivisionControllers.getDivisions
+);
+router.get(
+  "/:slug",
+
+ 
+  DivisionControllers.getSingleDivision
 );
 router.patch(
   "/:id",

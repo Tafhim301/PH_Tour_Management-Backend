@@ -25,7 +25,22 @@ const getDivisions = catchAsync(
       success: true,
       statusCode: httpStatus.OK,
       message: "Division retrieved Successfully",
-      data: divisions,
+      meta: divisions.meta,
+      data: divisions.data,
+    });
+  }
+);
+const getSingleDivision = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const slug = req.params.slug;
+    const divisions = await DivisionServices.getSingleDivision(slug);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Division retrieved Successfully",
+
+      data: divisions.data,
     });
   }
 );
@@ -63,4 +78,5 @@ export const DivisionControllers = {
   getDivisions,
   updateDivision,
   deleteDivision,
+  getSingleDivision,
 };
