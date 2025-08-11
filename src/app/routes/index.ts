@@ -4,6 +4,7 @@ import { AuthRoutes } from "../confiq/modules/auth/auth.routes";
 import { divisionRoutes } from "../confiq/modules/divisions/divisions.routes";
 import { tourRoutes } from "../confiq/modules/tour/tour.routes";
 import { bookingRoutes } from "../confiq/modules/bookings/booking.route";
+import { paymentRoutes } from "../confiq/modules/Payments/payment.routes";
 
 export const router = Router();
 
@@ -27,6 +28,10 @@ const moduleRoute = [
     {
         path : "/booking",
         route : bookingRoutes
+    },
+    {
+        path : "/payment",
+        route : paymentRoutes
     },
 
 

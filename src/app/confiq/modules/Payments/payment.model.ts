@@ -38,4 +38,4 @@ const paymentSchema = new Schema<IPayment>({
     timestamps : true
 })
 
-export const Payment = model<IPayment>("Booking",paymentSchema)
+export const Payment = model<IPayment>("Payment",paymentSchema)
