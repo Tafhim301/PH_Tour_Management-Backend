@@ -31,6 +31,19 @@ const updateTourType = catchAsync(
     });
   }
 );
+const getSingleTypes = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id
+    const tourTypes = await TourServices.getSingleTourType(id);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Tour Type retrieved Successfully",
+      data: tourTypes,
+    });
+  }
+);
 const getTourTypes = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const tourTypes = await TourServices.getTourTypes();

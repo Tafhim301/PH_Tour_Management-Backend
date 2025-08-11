@@ -19,6 +19,10 @@ const getTourTypes = async () => {
   const tourType = await TourType.find();
   return tourType;
 };
+const getSingleTourType = async (id : string) => {
+  const tourType = await TourType.findById(id);
+  return tourType;
+};
 const deleteTourType = async (id: string) => {
   const tourType = await TourType.findByIdAndDelete(id);
   return tourType;
@@ -72,6 +76,7 @@ const deleteTour = async (id: string) => {
 export const TourServices = {
   createTourType,
   getTourTypes,
+  getSingleTourType,
   updateTourType,
   deleteTourType,
   createTour,

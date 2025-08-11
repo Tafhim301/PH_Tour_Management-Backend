@@ -18,6 +18,12 @@ router.get(
 
   UserController.getAllUsers
 );
+router.get(
+  "/:id",
+  checkAuth(...Object.values(Role)),
+
+  UserController.getSingleUser
+);
 
 router.patch('/:id',validateRequest(updateUserZodSchema), checkAuth(...Object.values(Role)),UserController.updateUser)
 
