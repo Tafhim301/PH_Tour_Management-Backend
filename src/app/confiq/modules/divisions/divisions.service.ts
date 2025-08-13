@@ -1,4 +1,5 @@
 import AppError from "../../../ErrorHelpers/appError";
+import { deleteImageFromCloudinary } from "../../cloudinary.config";
 import { IDIvision } from "./divisions.interface";
 import { Division } from "./divisions.model";
 import httpStatus from "http-status-codes";
@@ -21,16 +22,16 @@ const getDivisions = async () => {
     total: totalDivision,
   };
 
-  return { data : divisions, meta };
+  return { data: divisions, meta };
 };
-const getSingleDivision = async (slug : string) => {
-  const divisions = await Division.findOne({slug : slug});
+const getSingleDivision = async (slug: string) => {
+  const divisions = await Division.findOne({ slug: slug });
   const totalDivision = await Division.countDocuments();
   const meta = {
     total: totalDivision,
   };
 
-  return { data : divisions, meta };
+  return { data: divisions, meta };
 };
 
 const updateDivision = async (id: string, payload: Partial<IDIvision>) => {
@@ -52,6 +53,9 @@ const updateDivision = async (id: string, payload: Partial<IDIvision>) => {
     new: true,
     runValidators: true,
   });
+  if(payload.thumbnail && divsion.thumbnail){
+    await deleteImageFromCloudinary(divsion.thumbnail)
+  }
   return updatedDivision;
 };
 const deleteDivision = async (id: string) => {
@@ -64,5 +68,5 @@ export const DivisionServices = {
   getDivisions,
   deleteDivision,
   updateDivision,
-  getSingleDivision
+  getSingleDivision,
 };

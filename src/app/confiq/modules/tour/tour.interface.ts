@@ -23,6 +23,7 @@ export interface ITour {
     maxGuest ?: number;
     minAge ?: number;
     divison : Types.ObjectId;
-    tourType : Types.ObjectId
+    tourType : Types.ObjectId;
+    deleteImages ?: string[]
 
 }

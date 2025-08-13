@@ -4,10 +4,20 @@ import { catchAsync } from "../../../utils/catchAsync";
 import { sendResponse } from "../../../utils/sendResponse";
 import httpStatus from "http-status-codes";
 import { DivisionServices } from "./divisions.service";
+import { IDIvision } from "./divisions.interface";
 
 const createDivision = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const division = await DivisionServices.createDivision(req.body);
+    const payload : IDIvision = {
+      ...req.body,
+      thumbnail : req.file?.path
+    }
+
+
+
+    const division = await DivisionServices.createDivision(payload);
+
+
 
     sendResponse(res, {
       success: true,
@@ -20,6 +30,7 @@ const createDivision = catchAsync(
 const getDivisions = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const divisions = await DivisionServices.getDivisions();
+
 
     sendResponse(res, {
       success: true,
@@ -46,9 +57,13 @@ const getSingleDivision = catchAsync(
 );
 const updateDivision = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const payload = {
+      ...req.body,
+      thumbnail : req.file?.path
+    }
     const id = req.params.id;
-    const body = req.body;
-    const divisions = await DivisionServices.updateDivision(id, body);
+    
+    const divisions = await DivisionServices.updateDivision(id, payload);
 
     sendResponse(res, {
       success: true,

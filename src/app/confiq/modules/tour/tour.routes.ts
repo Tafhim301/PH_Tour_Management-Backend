@@ -4,6 +4,7 @@ import { Role } from "../user/user.interface";
 import { validateRequest } from "../../../middlewares/validateRequest";
 import { createTourSchema, createUpdateTourTypeSchema, updateTourSchema } from "./tour.validation";
 import { tourControllers } from "./tour.controller";
+import { multerUpload } from "../../multer.confg";
 
 const router = Router();
 
@@ -15,6 +16,7 @@ router.post(
 );
 router.post(
   "/create",
+  multerUpload.array("files"),
   checkAuth(Role.SUPER_ADMIN, Role.ADMIN),
   validateRequest(createTourSchema),
   tourControllers.createTour

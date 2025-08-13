@@ -23,6 +23,7 @@ export const createTourSchema = z.object({
   tourPlan: z.array(z.string()).optional(),
   departureLocation : z.string().optional(),
   arrivalLocation : z.string().optional(),
+
 });
 
 export const updateTourSchema = z.object({
@@ -42,4 +43,6 @@ export const updateTourSchema = z.object({
   excluded: z.array(z.string()).optional(),
   included: z.array(z.string()).optional(),
   tourPlan: z.array(z.string()).optional(),
+  deleteImages : z.array(z.string()).optional(),
+
 });

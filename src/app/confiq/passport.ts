@@ -6,9 +6,10 @@ import {
 } from "passport-google-oauth20";
 import { envVars } from "./env";
 import { User } from "./modules/user/user.model";
-import { Role } from "./modules/user/user.interface";
+import { isActive, Role } from "./modules/user/user.interface";
 import { Strategy as localStrategy } from "passport-local";
 import bcryptjs from "bcryptjs";
+
 
 passport.use(
   new GoogleStrategy(
@@ -29,9 +30,26 @@ passport.use(
           return done(null, false, { message: "Email Not Found" });
         }
 
-        let user = await User.findOne({ email });
-        if (!user) {
-          user = await User.create({
+        let doesUserExist = await User.findOne({ email });
+        
+        if (!doesUserExist) {
+          return done(null, false, { message: "User does not Exist" });
+        }
+
+        if (doesUserExist &&
+          (doesUserExist.isActive === isActive.BLOCKED ||
+          doesUserExist.isActive === isActive.INACTIVE)
+        ) {
+          return done(null,false,{message: `User is ${doesUserExist.isActive}`});
+        }
+        if (doesUserExist && doesUserExist.isDeleted) {
+          return done(null,false,{message : "User is deleted"});
+        }
+        if (doesUserExist && doesUserExist.isVerified) {
+          return done(null,false, {message : "User is not verified"});
+        }
+        if (!doesUserExist) {
+          doesUserExist = await User.create({
             email,
             name: profile.displayName,
             picture: profile.photos?.[0].value,
@@ -46,7 +64,7 @@ passport.use(
           });
         }
 
-        return done(null, user);
+        return done(null, doesUserExist);
       } catch (error) {
         console.log("ggogle strategy Error", error);
         return done(error);
@@ -66,6 +84,19 @@ passport.use(
         const doesUserExist = await User.findOne({ email });
         if (!doesUserExist) {
           return done(null, false, { message: "User does not Exist" });
+        }
+
+        if (
+          doesUserExist.isActive === isActive.BLOCKED ||
+          doesUserExist.isActive === isActive.INACTIVE
+        ) {
+          return done(`User is ${doesUserExist.isActive}`);
+        }
+        if (doesUserExist.isDeleted) {
+         return done("User is deleted");
+        }
+        if (!doesUserExist.isVerified) {
+         return done("User is not verified");
         }
 
         const isGoogleAuthenticated = doesUserExist.auths.some(
