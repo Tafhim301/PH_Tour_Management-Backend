@@ -6,6 +6,7 @@ import { tourRoutes } from "../confiq/modules/tour/tour.routes";
 import { bookingRoutes } from "../confiq/modules/bookings/booking.route";
 import { paymentRoutes } from "../confiq/modules/Payments/payment.routes";
 import { otpRoutes } from "../confiq/modules/otp/otp.routes";
+import { StatsRoutes } from "../confiq/modules/stats/stats.routes";
 
 export const router = Router();
 
@@ -37,6 +38,10 @@ const moduleRoute = [
     {
         path : "/otp",
         route : otpRoutes
+    },
+    {
+        path : "/stats",
+        route : StatsRoutes
     },
 
 

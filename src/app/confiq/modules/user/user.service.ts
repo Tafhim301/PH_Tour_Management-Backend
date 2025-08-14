@@ -53,15 +53,15 @@ const getAllUsers = async (query: Record<string, string>) => {
   return { meta: meta, data: data };
 };
 
-const getSingleUser = async(id : string) => {
-  const user = User.findById(id).select('-password')
+const getSingleUser = async (id: string) => {
+  const user = User.findById(id).select("-password");
   return user;
-}
+};
 
-const getMe = async(id : string) => {
-  const user = User.findById(id).select("-password")
+const getMe = async (id: string) => {
+  const user = User.findById(id).select("-password");
   return user;
-}
+};
 
 const updateUser = async (
   userId: string,
@@ -75,7 +75,9 @@ const updateUser = async (
 
   if (payload.role) {
     if (decodedToken.role === Role.USER || decodedToken.role === Role.GUIDE) {
-      throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
+      if (userId !== decodedToken.userId) {
+        throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
+      }
     }
 
     if (payload.role === Role.SUPER_ADMIN && decodedToken.role === Role.ADMIN) {
@@ -87,13 +89,6 @@ const updateUser = async (
     if (decodedToken.role === Role.USER || decodedToken.role === Role.GUIDE) {
       throw new AppError(httpStatus.FORBIDDEN, "You are not authorized");
     }
-  }
-
-  if (payload.password) {
-    payload.password = await bcryptjs.hash(
-      payload.password,
-      Number(envVars.BCRYPT_SALT_ROUND)
-    );
   }
 
   const updatedUser = await User.findByIdAndUpdate(userId, payload, {
@@ -109,5 +104,5 @@ export const UserServices = {
   getAllUsers,
   updateUser,
   getSingleUser,
-  getMe
+  getMe,
 };

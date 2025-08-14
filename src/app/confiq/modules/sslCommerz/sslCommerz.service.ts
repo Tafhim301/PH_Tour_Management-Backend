@@ -1,5 +1,6 @@
 import AppError from "../../../ErrorHelpers/appError";
 import { envVars } from "../../env";
+import { Payment } from "../Payments/payment.model";
 import { ISSLCommerz } from "./sslCommerz.interface";
 import axios, { HttpStatusCode } from "axios";
 
@@ -52,6 +53,33 @@ const sslPaymentInit = async (payload: ISSLCommerz) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const validatePayment = async (payload : any) => {
+ try {
+   const response = await axios({
+    method : "GET",
+    url : `${envVars.SSL.SSL_VALIDATION_API}?val_id=${payload.val_id}&store_id=${envVars.SSL.STORE_ID}&store_password=${envVars.SSL.STORE_PASS}`
+  })
+
+await Payment.updateOne(
+            { transactionId: payload.tran_id },
+            { paymentGatewayData: response.data },
+            { runValidators: true })
+
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}  catch (error : any) {
+
+     throw new AppError(HttpStatusCode.BadRequest, error);
+
+
+
+
+
+  
+ }
+}
 export const SSLServiece = {
-    sslPaymentInit
+    sslPaymentInit,
+    validatePayment
 }
