@@ -102,13 +102,15 @@ const validatePayment = (payload) => __awaiter(void 0, void 0, void 0, function*
     try {
         const response = yield (0, axios_1.default)({
             method: "GET",
-            url: `${env_1.envVars.SSL.SSL_VALIDATION_API}?val_id=${payload.val_id}&store_id=${env_1.envVars.SSL.STORE_ID}&store_password=${env_1.envVars.SSL.STORE_PASS}`
+            url: `${env_1.envVars.SSL.SSL_VALIDATION_API}?val_id=${payload.val_id}&store_id=${env_1.envVars.SSL.STORE_ID}&store_passwd=${env_1.envVars.SSL.STORE_PASS}`
         });
+        console.log("sslcomeerz validate api response", response.data);
         yield payment_model_1.Payment.updateOne({ transactionId: payload.tran_id }, { paymentGatewayData: response.data }, { runValidators: true });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
     catch (error) {
-        throw new appError_1.default(axios_1.HttpStatusCode.BadRequest, error);
+        console.log(error);
+        throw new appError_1.default(401, `Payment Validation Error, ${error.message}`);
     }
 });
 exports.SSLServiece = {

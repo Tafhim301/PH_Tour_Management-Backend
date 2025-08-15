@@ -53,31 +53,26 @@ const sslPaymentInit = async (payload: ISSLCommerz) => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const validatePayment = async (payload : any) => {
- try {
-   const response = await axios({
-    method : "GET",
-    url : `${envVars.SSL.SSL_VALIDATION_API}?val_id=${payload.val_id}&store_id=${envVars.SSL.STORE_ID}&store_password=${envVars.SSL.STORE_PASS}`
-  })
 
-await Payment.updateOne(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const validatePayment = async (payload: any) => {
+    try {
+        const response = await axios({
+            method: "GET",
+            url: `${envVars.SSL.SSL_VALIDATION_API}?val_id=${payload.val_id}&store_id=${envVars.SSL.STORE_ID}&store_passwd=${envVars.SSL.STORE_PASS}`
+        })
+
+        console.log("sslcomeerz validate api response", response.data);
+
+        await Payment.updateOne(
             { transactionId: payload.tran_id },
             { paymentGatewayData: response.data },
             { runValidators: true })
-
-  
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-}  catch (error : any) {
-
-     throw new AppError(HttpStatusCode.BadRequest, error);
-
-
-
-
-
-  
- }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        console.log(error);
+        throw new AppError(401, `Payment Validation Error, ${error.message}`)
+    }
 }
 export const SSLServiece = {
     sslPaymentInit,

@@ -57,11 +57,12 @@ const getInvoiceDownloadUrl = (0, catchAsync_1.catchAsync)((req, res) => __await
     });
 }));
 const validatePayment = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("sslcommerz ipn url body", req.body);
     yield sslCommerz_service_1.SSLServiece.validatePayment(req.body);
     (0, sendResponse_1.sendResponse)(res, {
         statusCode: 200,
         success: true,
-        message: "Payment validation successful",
+        message: "Payment Validated Successfully",
         data: null,
     });
 }));
